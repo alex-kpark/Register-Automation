@@ -1,7 +1,4 @@
 #-*- coding: utf-8 -*-
-import sys
-reload(sys)
-sys.setdefaultencoding('utf-8')
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -9,10 +6,10 @@ from selenium.webdriver.common import action_chains
 from time import sleep
 
 #For OSX
-driver = webdriver.Chrome('/usr/local/bin/chromedriver')
+#driver = webdriver.Chrome('/usr/local/bin/chromedriver')
 
 #For Windows
-#driver = webdriver.Chrome('C:/Users/PC/AppData/Local/Programs/Python/chromedriver.exe')
+driver = webdriver.Chrome('C:/Users/PC/AppData/Local/Programs/Python/chromedriver.exe')
 driver.get('https://www.esmplus.com/Member/SignIn/LogOn?ReturnValue=-7')
 
 #login
@@ -34,7 +31,7 @@ def login(id, pw):
     driver.get('http://www.esmplus.com/Home/Home#HTDM395')
     driver.switch_to_frame("ifm_TDM395")
     
-    #sleep을 쓰지 않고 하는 방법은 없을까? #######
+    
 
 def select_market():
     cancel_ac = driver.find_element_by_xpath("//input[@name='regi-nameiac'][@value='false']")
@@ -52,8 +49,6 @@ def select_market():
 
 #category : 브랜드 카테고리 항목을 잘 못잡음
 def category(cate_name):
-    #검색으로 구현
-
     search_esm = driver.find_element_by_xpath("//input[@placeholder='ESM 카테고리명 검색']")
     search_esm.send_keys(cate_name)
     esm_click = driver.find_element_by_xpath("//img[@src='http://pics.esmplus.com/front/sell/icon_search.gif']")
@@ -63,7 +58,21 @@ def category(cate_name):
     esm_target = esm_result[4]
     esm_target.click()
     sleep(1)
-    print('here is done')
+
+    auc_cates = driver.find_elements_by_xpath("//select[@style='width: 160px;']")
+    auc_cates[0].find_element_by_xpath("//option[contains(text(), '가방/패션잡화')]").click()
+    auc_cates[1].find_element_by_xpath("//option[contains(text(), '여성가방')]").click()
+    auc_cates[2].find_element_by_xpath("//option[contains(text(), '토트백')]").click()
+    print('finished')
+
+    gmk_cates = driver.find_elements_by_xpath("//select[@style='width: 215px;']")
+    print(1)
+    gmk_cates[0].find_element_by_xpath("//option[contains(text(), '브랜드 신발/가방')]").click()
+    print(2)
+    gmk_cates[1].find_element_by_xpath("//option[contains(text(), '여성가방')]").click()
+    print(3)
+    #driver.find_element_by_xpath("//select[@style='width: 214px;']/option[contains(text(), '토트백')]").click()
+    print(4)
 
 def product_info(name, promo, auc_price, gmk_price):
     prod_name = driver.find_element_by_xpath("//input[@id='txtGoodsNameSearch']")
@@ -168,22 +177,46 @@ def extra_info(disc_info):
             dur_start.send_keys(disc_info[3])
             dur_end.send_keys(disc_info[4])
         
-def exposure_info(deliver_date, deliver_method, ):
+def exposure_info(deliver_date, deliver_method, product_detail):
     
     move_btn = driver.find_element_by_xpath("//li[@class='menu_item2']")
     move_btn.click()
 
-    #image 연결? : 이미지 연결이 안됨
-    '''
-    브라우저에서 팝업창으로 넘어가야 하는데, 팝업창을 못잡고 있음
-    #product_details
-    ebay_writer = driver.find_element_by_xpath("//a[@id='btnNewDesc']")
-    ebay_writer.click()
+    #image input 가져온 다음에 로컬에 있는 주소를 넣어주면 됨
+    image_regi = driver.find_element_by_xpath("//input[@name='btnSelectFile']")
+    image_regi.send_keys("C:/Users/PC/Desktop/AutomateRegister/image.jpeg")
 
-    popup_exit = driver.find_element_by_xpath("//button[@class='slider-roll-button slider-roll-next']")    
-    press_exit.click()
-    '''
+    #상품세부정보
+    info_btn = driver.find_element_by_xpath("//a[@id='btnNewDesc']")
+    info_btn.click()
 
+    test = driver.window_handles
+    
+    for i in range(0,3):
+        try:
+            driver.switch_to_window(test[i])
+            close_ebaypop = driver.find_element_by_xpath("//button[@class='slider-roll-button slider-roll-next']")
+            
+            for t in range(0,9):
+                close_ebaypop.click()
+
+            start_write = driver.find_element_by_class_name('layer-close-button')
+            sleep(3)
+            start_write.click()
+            section_write = driver.find_element_by_xpath("//div[@class='ee-contents']")
+            section_write.send_keys(product_detail)
+            save_write = driver.find_element_by_xpath("//button[@id='btnSave']")
+            save_write.click()
+            save_end = driver.find_element_by_xpath("//button[@class='ee-button ee-button-positive']")
+            save_end.click()
+
+            #driver.close()
+
+        except Exception as e:
+            print('fail')
+    
+
+    '''
     #상품정보공시 입력 - 카테고리에 따라 value 입력
     product_type = driver.find_element_by_xpath("//select[@name='ddlOfficialNotiGroup']/option[@value='3']")
     product_type.click()
@@ -210,14 +243,18 @@ def exposure_info(deliver_date, deliver_method, ):
         truck_deliv.click()
     else:
         direct_deliv = driver.find_element_by_xpath("//input[@id='rdoCommonDeliveryWayOPTSEL3']")
-
+        direct_deliv.click()
+    '''
+    
 
 login('#id', '#pw')
 
 auc = True
 gmk = True
 
-category(str(unicode('여성가방')))
+exposure_info(False, 0, '상품의 자세한 정보를 이곳에 입력해주세요')
+
+#category('여성가방')
 
 '''
 select_market()
@@ -239,6 +276,6 @@ extra_info(['m', 1000, 'l', '2018-09-15', '2018-10-20'])
 
 
 #True/False for 배송일 / 0,1,2 for 발송방법 
-exposure_info(False, 0)
+
 
 '''
