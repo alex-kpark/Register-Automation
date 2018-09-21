@@ -1,28 +1,27 @@
+#-*- coding: utf-8 -*-
+
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common import action_chains
-
 from time import sleep
 
-#Login 
+#Login - for Chrome
 driver = webdriver.Chrome('C:/Users/PC/AppData/Local/Programs/Python/chromedriver.exe')
 driver.get('http://www.ssobing.com/selleradmin/login/index')
 
-id = 'InputIdHere'
-pw = 'InputPasswordHere'
+def login(id, pw):
+    input_id = driver.find_element_by_xpath("//input[contains(@name, 'main_id')]")
+    input_pw = driver.find_element_by_xpath("//input[contains(@name, 'main_pwd')]")
 
-input_id = driver.find_element_by_xpath("//input[contains(@name, 'main_id')]")
-input_pw = driver.find_element_by_xpath("//input[contains(@name, 'main_pwd')]")
+    input_id.send_keys(id)
+    input_pw.send_keys(pw)
 
-input_id.send_keys(id)
-input_pw.send_keys(pw)
+    login = driver.find_element_by_xpath("//input[contains(@class, 'submit_btn')]")
+    login.send_keys(Keys.ENTER)
 
-login = driver.find_element_by_xpath("//input[contains(@class, 'submit_btn')]")
-login.send_keys(Keys.ENTER)
+    driver.get('http://www.ssobing.com/selleradmin/goods/regist')
 
-driver.get('http://www.ssobing.com/selleradmin/goods/regist')
-
-action = action_chains.ActionChains(driver)
+    action = action_chains.ActionChains(driver)
 
 def brand_classifier(a):
     category_btn = driver.find_element_by_xpath("//button[contains(@id, 'categoryConnectPopup')]")
@@ -144,6 +143,9 @@ def selling_info(min_num, max_num, multiple):
 def essential_option():
     pass
 
+def image_upload():
+
+
 def delivery(delivery_info):
     
     '''
@@ -165,7 +167,8 @@ def delivery(delivery_info):
         #합이 n1원 이상이면 무료, 미만이면 선불 n2원
         #배송정책 관련된 숫자만 두고, 나머지는 0처리
 
-        if delivery_info[1] != 0:
+        #원래 None이 아니라 0이었음
+        if delivery_info[1] != None:
             fixed_fee = driver.find_element_by_xpath("//input[@name='unlimitShippingPrice']")
             fixed_fee.send_keys(delivery_info[1])
 
@@ -201,6 +204,10 @@ def final_upload():
     save_submit = driver.find_element_by_xpath("//button[@id='openDialogLayerConfirmYesBtn']")
     save_submit.click()
 
+
+'''
+login(id, pw)
+
 brand_classifier('여성의류')
 
 product_info('샘플 이름을 입력합니다',
@@ -217,3 +224,4 @@ selling_info(3,10, [True, 4, 10, 'p'])
 delivery([False,0,5,10000,15000,0,0])
 
 final_upload()
+'''

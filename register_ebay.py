@@ -283,7 +283,7 @@ def finish():
 
 
 #Activate from here
-login('#id', '#pw')
+login('pineapples', 'joejoe11!!')
 
 auc = True
 gmk = True
