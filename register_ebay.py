@@ -12,7 +12,7 @@ from time import sleep
 driver = webdriver.Chrome('C:/Users/PC/AppData/Local/Programs/Python/chromedriver.exe')
 driver.get('https://www.esmplus.com/Member/SignIn/LogOn?ReturnValue=-7')
 
-def login(id, pw):
+def ebay_login(id, pw):
 
     input_id = driver.find_element_by_xpath("//input[@id='Id']")
     input_pw = driver.find_element_by_xpath("//input[@id='Password']")

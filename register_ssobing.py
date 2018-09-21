@@ -6,10 +6,10 @@ from selenium.webdriver.common import action_chains
 from time import sleep
 
 #Login - for Chrome
-driver = webdriver.Chrome('C:/Users/PC/AppData/Local/Programs/Python/chromedriver.exe')
+driver = webdriver.Chrome('C:/Users/ALEXa/AppData/Local/Programs/Python/chromedriver.exe')
 driver.get('http://www.ssobing.com/selleradmin/login/index')
 
-def login(id, pw):
+def ssobing_login(id, pw):
     input_id = driver.find_element_by_xpath("//input[contains(@name, 'main_id')]")
     input_pw = driver.find_element_by_xpath("//input[contains(@name, 'main_pwd')]")
 
@@ -144,7 +144,7 @@ def essential_option():
     pass
 
 def image_upload():
-
+    pass
 
 def delivery(delivery_info):
     
@@ -204,24 +204,13 @@ def final_upload():
     save_submit = driver.find_element_by_xpath("//button[@id='openDialogLayerConfirmYesBtn']")
     save_submit.click()
 
-
 '''
-login(id, pw)
+추가 개발사항
 
-brand_classifier('여성의류')
+1. 대표이미지 등록하는 def ssob_main 생성
+    - 대표 이미지 AWS s3에서 끌어다가 넣어주기
 
-product_info('샘플 이름을 입력합니다',
-            '설명을 입력합니다',
-            '브랜드코드를 입력합니다',
-            '검색어1을 입력',
-            '외부검색1을 입력',
-            False,
-            True,
-            True,
-            178272
-            )
-selling_info(3,10, [True, 4, 10, 'p'])
-delivery([False,0,5,10000,15000,0,0])
-
-final_upload()
+2. 상세설명 등록하는 def ssob_mcont 생성
+    - HTML체크 이후
+    - 특정내용 집어넣기
 '''
