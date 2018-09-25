@@ -3,10 +3,30 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common import action_chains
+from selenium.webdriver import ActionChains
+
+import urllib.request
+import requests
+
+import os
 from time import sleep
 
-#Login - for Chrome
-driver = webdriver.Chrome('C:/Users/ALEXa/AppData/Local/Programs/Python/chromedriver.exe')
+# In case of chrome 69
+# https://stackoverflow.com/questions/52185371/allow-flash-content-in-chrome-69-running-via-chromedriver/52254172
+chrome_options = webdriver.ChromeOptions()
+
+prefs = {
+        "profile.default_content_setting_values.plugins": 1,
+        "profile.content_settings.plugin_whitelist.adobe-flash-player": 1,
+        "profile.content_settings.exceptions.plugins.*,*.per_resource.adobe-flash-player": 1,
+        "PluginsAllowedForUrls": "http://www.ssobing.com"
+}
+
+chrome_options.add_experimental_option("prefs",prefs)
+chrome_options.add_argument("--disable-features=EnableEphemeralFlashPermission")
+chrome_path = 'C:/Users/ALEXa/AppData/Local/Programs/Python/chromedriver.exe'
+
+driver = webdriver.Chrome(executable_path=chrome_path, options=chrome_options)
 driver.get('http://www.ssobing.com/selleradmin/login/index')
 
 def ssobing_login(id, pw):
@@ -20,8 +40,6 @@ def ssobing_login(id, pw):
     login.send_keys(Keys.ENTER)
 
     driver.get('http://www.ssobing.com/selleradmin/goods/regist')
-
-    action = action_chains.ActionChains(driver)
 
 def brand_classifier(a):
     category_btn = driver.find_element_by_xpath("//button[contains(@id, 'categoryConnectPopup')]")
@@ -39,8 +57,6 @@ def brand_classifier(a):
     tote_bag = driver.find_element_by_xpath("//option[contains(@value, 'B00200090004')]")
     tote_bag.click()
     sleep(3)
-
-    action.send_keys(Keys.COMMAND+Keys.ALT+'i')
 
     #정확하게 tag달아서 지정해주어야 함, 여러 Element가 검색되었어서 오류 발생
     category_fin = driver.find_element_by_xpath("//button[@id='categoryConnect'][@onclick='this.form.submit();']")
@@ -143,8 +159,60 @@ def selling_info(min_num, max_num, multiple):
 def essential_option():
     pass
 
+# Needs to be fixed
 def image_upload():
-    pass
+    
+    '''
+    urllib.request.urlretrieve('https://s3-ap-northeast-2.amazonaws.com/gmp01/1196/prod/S258FCDADF9C/upload_a6ddc0523f3032b771497dba704b9fe7.jpg', path_to_image)
+    driver.find_element_by_xpath("//object[@id='uploaderUploader']").send_keys(path_to_image)
+    
+    base_dir = 'C:/Users/ALEXa/Desktop/AutomateRegister/sample_image/'
+    path_to_image = os.path.join(base_dir, 'upload_img.jpg')
+    '''
+    image_btn = driver.find_element_by_xpath("//button[@class='batchImageMultiRegist']")
+    image_btn.click()    
+    test = driver.window_handles
+    driver.switch_to_window(test[1])
+
+    driver.find_element_by_xpath("//object[@id='uploaderUploader']").click()
+
+    driver.find_element_by_tag_name('body').send_keys(Keys.CONTROL + 't')
+    driver.get('http://www.ssobing.com/selleradmin/goods_process/upload_file_multi')
+    
+    response = requests.post(url='http://www.ssobing.com/selleradmin/goods_process/upload_file_multi/', data={'Filedata':'C:\\store\\1.jpg'})
+    print(response)
+    print(response.status_code)
+
+    print('success')
+
+    '''
+    1) http://www.ssobing.com/selleradmin/goods_process/upload_file_multi
+    2) POST 요청으로 파일을 실어 보냄
+    3) 세션이 살아있을 때 하므로, 열렸을 때 크롬에서 바로 보내줌 
+
+    http://php.net/manual/kr/features.file-upload.post-method.php
+    
+    그래도 안되면 AutoIT 이용해서 등록
+    
+    '''
+
+
+def detailed_exp(detailed_cont):
+    
+    register_dexp = driver.find_element_by_xpath("//span[@id='goodscontentsbtn']")
+    register_dexp.click()
+
+    check_html = driver.find_element_by_xpath("//div[@id='tx_switchertoggle1']")
+    check_html.click()
+
+    cont_area = driver.find_element_by_xpath("//textarea[@id='tx_canvas_source1']")
+    cont_area.send_keys(detailed_cont)
+
+    cont_save = driver.find_element_by_xpath("//button[@onclick='view_editor_save()']")
+    cont_save.click()
+
+    alert = driver.switch_to_alert()
+    alert.accept()
 
 def delivery(delivery_info):
     
@@ -154,7 +222,6 @@ def delivery(delivery_info):
     n2, n3, n4, n5, :포장단위별
     n6, n7 : 조건부무료
     ]
-    
     '''
     if delivery_info[0] == True:
         pass
@@ -204,13 +271,37 @@ def final_upload():
     save_submit = driver.find_element_by_xpath("//button[@id='openDialogLayerConfirmYesBtn']")
     save_submit.click()
 
+id = 'pineappleshop'
+pw = 'joejoe11!!'
+
+ssobing_login(id, pw)
+image_upload()
+
+'''
+brand_classifier('여성의류')
+
+product_info('샘플 이름을 입력합니다',
+            '설명을 입력합니다',
+            '브랜드코드를 입력합니다',
+            '검색어1을 입력',
+            '외부검색1을 입력',
+            False,
+            True,
+            True,
+            178272
+            )
+selling_info(3,10, [True, 4, 10, 'p'])
+delivery([False,0,5,10000,15000,0,0])
+
+detailed_exp('Hello World!')
+
+#final_upload()
+'''
+
+
 '''
 추가 개발사항
 
 1. 대표이미지 등록하는 def ssob_main 생성
     - 대표 이미지 AWS s3에서 끌어다가 넣어주기
-
-2. 상세설명 등록하는 def ssob_mcont 생성
-    - HTML체크 이후
-    - 특정내용 집어넣기
 '''

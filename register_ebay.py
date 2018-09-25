@@ -188,7 +188,7 @@ def exposure_info(deliver_date, deliver_method, product_detail):
 
     #image input 가져온 다음에 로컬에 있는 주소를 넣어주면 됨
     image_regi = driver.find_element_by_xpath("//input[@name='btnSelectFile']")
-    image_regi.send_keys("C:/Users/PC/Desktop/AutomateRegister/image.jpeg")
+    image_regi.send_keys("C:/Users/ALEXa/Desktop/AutomateRegister/image.jpeg")
 
     #상품세부정보
     info_btn = driver.find_element_by_xpath("//a[@id='btnNewDesc']")
