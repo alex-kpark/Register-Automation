@@ -193,9 +193,7 @@ def image_upload():
     http://php.net/manual/kr/features.file-upload.post-method.php
     
     그래도 안되면 AutoIT 이용해서 등록
-    
     '''
-
 
 def detailed_exp(detailed_cont):
     
@@ -271,8 +269,8 @@ def final_upload():
     save_submit = driver.find_element_by_xpath("//button[@id='openDialogLayerConfirmYesBtn']")
     save_submit.click()
 
-id = 'pineappleshop'
-pw = 'joejoe11!!'
+id = '#id'
+pw = '#pw'
 
 ssobing_login(id, pw)
 image_upload()
