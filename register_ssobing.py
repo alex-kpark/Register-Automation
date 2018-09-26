@@ -136,7 +136,7 @@ def selling_info(min_num, max_num, multiple):
         max_content = driver.find_element_by_xpath("//input[@name='maxPurchaseEa']")
         max_content.send_keys(max_num)
 
-    #Multiple Purchase multiple = [Bool, cond_num, obj_num2, 'p' or 'w(won)']
+    #Multiple Purchase multiple = [Bool, cond_num, obj_num, 'p' or 'w(won)']
     multiple_check = driver.find_element_by_xpath("//input[@name='multiDiscountUse']")
     if multiple[0] == True:
         multiple_check.click()
@@ -199,6 +199,7 @@ def detailed_exp(detailed_cont):
     
     register_dexp = driver.find_element_by_xpath("//span[@id='goodscontentsbtn']")
     register_dexp.click()
+    sleep(3)
 
     check_html = driver.find_element_by_xpath("//div[@id='tx_switchertoggle1']")
     check_html.click()
@@ -261,6 +262,13 @@ def delivery(delivery_info):
             cond_unit.send_keys(delivery_info[6])
             cond_price.send_keys(delivery_info[7])
 
+def price(legit_price, disc_price):
+    legitimate_price = driver.find_element_by_xpath("//input[@name='consumerPrice[]']")
+    legitimate_price.send_keys(legit_price)
+
+    discounted_price = driver.find_element_by_xpath("//input[@name='price[]']")
+    discounted_price.send_keys(disc_price)
+
 def final_upload():
     #save_info = driver.find_element_by_xpath("//span[@class='btn large black']/button[@onclick='goods_save('view')']")
     save_info = driver.find_element_by_xpath("//ul[@class='page-buttons-right']")
@@ -269,37 +277,5 @@ def final_upload():
     save_submit = driver.find_element_by_xpath("//button[@id='openDialogLayerConfirmYesBtn']")
     save_submit.click()
 
-id = '#id'
-pw = '#pw'
-
-ssobing_login(id, pw)
-image_upload()
-
-'''
-brand_classifier('여성의류')
-
-product_info('샘플 이름을 입력합니다',
-            '설명을 입력합니다',
-            '브랜드코드를 입력합니다',
-            '검색어1을 입력',
-            '외부검색1을 입력',
-            False,
-            True,
-            True,
-            178272
-            )
-selling_info(3,10, [True, 4, 10, 'p'])
-delivery([False,0,5,10000,15000,0,0])
-
-detailed_exp('Hello World!')
-
-#final_upload()
-'''
-
-
-'''
-추가 개발사항
-
-1. 대표이미지 등록하는 def ssob_main 생성
-    - 대표 이미지 AWS s3에서 끌어다가 넣어주기
-'''
+    okay_submit = driver.find_element_by_xpath("//input[@value='확인']")
+    okay_submit.click()
