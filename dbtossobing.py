@@ -26,6 +26,9 @@ initial_dict_data = json.loads(prod_data)
 
 #(2)items 들이 담겨있는 json
 #items 처음 시작하는 곳 부터 [] 시작하기 전까지 끊어냄
+'''
+cont_start 형태로 다시 수정해야함
+'''
 item_list_data = initial_dict_data["items"]
 item_dict_data = ast.literal_eval(str(item_list_data[0])[0:502] + '}')
 
