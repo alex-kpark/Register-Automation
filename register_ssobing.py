@@ -11,6 +11,10 @@ import requests
 import os
 from time import sleep
 
+import xlrd
+from collections import OrderedDict
+import json
+
 # In case of chrome 69
 # https://stackoverflow.com/questions/52185371/allow-flash-content-in-chrome-69-running-via-chromedriver/52254172
 
@@ -161,7 +165,7 @@ def selling_info(min_num, max_num, multiple):
 def essential_option():
     pass
 
-def size_option(ops_name, size_val, c_price, r_price):
+def color_size(ops_name, size_val, c_price, r_price, inventory):
     size_allow = driver.find_element_by_xpath("//input[@name='optionUse'][@value='1']")
     size_allow.click()
 
@@ -194,10 +198,13 @@ def size_option(ops_name, size_val, c_price, r_price):
     for cons in cons_prices:
         cons.send_keys(c_price)    
 
-
     real_prices = driver.find_elements_by_xpath("//input[@name='price']")
     for reals in real_prices:
         reals.send_keys(r_price)
+
+    inventories = driver.find_elements_by_xpath("//input[@name='stock']")
+    for invens in inventories:
+        invens.send_keys(inventory)
 
     essential_ops = driver.find_element_by_xpath("//input[@name='frequently'][@value='1']")
     essential_ops.click()
