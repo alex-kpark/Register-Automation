@@ -71,7 +71,7 @@ pw = '#pw'
 
 #Step4 : 실행
 ssobing_login(id, pw)
-brand_classifier('여성의류')
+brand_classifier()
 product_info(name, sum_content, brand_code, keywords, outside_words, tax_bool, cancel_bool, adult_bool, hscode_cont)
 selling_info(min_num, max_num, multiple)
 delivery([False,0,5,10000,15000,0,0])

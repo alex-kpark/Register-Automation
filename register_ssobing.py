@@ -13,6 +13,7 @@ from time import sleep
 
 # In case of chrome 69
 # https://stackoverflow.com/questions/52185371/allow-flash-content-in-chrome-69-running-via-chromedriver/52254172
+
 chrome_options = webdriver.ChromeOptions()
 
 prefs = {
@@ -27,9 +28,10 @@ chrome_options.add_argument("--disable-features=EnableEphemeralFlashPermission")
 chrome_path = 'C:/Users/ALEXa/AppData/Local/Programs/Python/chromedriver.exe'
 
 driver = webdriver.Chrome(executable_path=chrome_path, options=chrome_options)
-driver.get('http://www.ssobing.com/selleradmin/login/index')
 
 def ssobing_login(id, pw):
+    driver.get('http://www.ssobing.com/selleradmin/login/index')
+
     input_id = driver.find_element_by_xpath("//input[contains(@name, 'main_id')]")
     input_pw = driver.find_element_by_xpath("//input[contains(@name, 'main_pwd')]")
 
@@ -41,20 +43,20 @@ def ssobing_login(id, pw):
 
     driver.get('http://www.ssobing.com/selleradmin/goods/regist')
 
-def brand_classifier(a):
+def brand_classifier():
     category_btn = driver.find_element_by_xpath("//button[contains(@id, 'categoryConnectPopup')]")
     category_btn.click()
     sleep(3)
 
-    misc_btn = driver.find_element_by_xpath("//option[contains(@value, 'B002')]")
+    misc_btn = driver.find_element_by_xpath("//option[contains(@value, 'A001')]")
     misc_btn.click()
     sleep(3)
 
-    female_bag = driver.find_element_by_xpath("//option[contains(@value, 'B0020009')]")
+    female_bag = driver.find_element_by_xpath("//option[contains(@value, 'A0010003')]")
     female_bag.click()
     sleep(3)
 
-    tote_bag = driver.find_element_by_xpath("//option[contains(@value, 'B00200090004')]")
+    tote_bag = driver.find_element_by_xpath("//option[contains(@value, 'A00100030002')]")
     tote_bag.click()
     sleep(3)
 
@@ -158,6 +160,54 @@ def selling_info(min_num, max_num, multiple):
 
 def essential_option():
     pass
+
+def size_option(ops_name, size_val, c_price, r_price):
+    size_allow = driver.find_element_by_xpath("//input[@name='optionUse'][@value='1']")
+    size_allow.click()
+
+    create_size = driver.find_element_by_xpath("//button[@id='optionMake']")
+    create_size.send_keys(Keys.ENTER)
+
+    windows = driver.window_handles
+    driver.switch_to_window(windows[1])
+    sleep(2)
+
+    create_ops = driver.find_element_by_xpath("//button[@id='optionMake']")
+    sleep(2)
+    create_ops.click()
+
+    ops_var = driver.find_element_by_xpath("//input[@name='optionMakeName[]'][@class='line']")
+    ops_var.send_keys(ops_name)
+
+    ops_val = driver.find_element_by_xpath("//input[@name='optionMakeValue[]']")
+    ops_val.send_keys(size_val)
+
+    sleep(1)
+    ops_select = driver.find_element_by_xpath("//button[@id='gdoptioncodemakebtn']")
+    sleep(2)
+    ops_select.click()
+    
+    alert = driver.switch_to_alert()
+    alert.accept()
+
+    cons_prices = driver.find_elements_by_xpath("//input[@name='consumer_price']")
+    for cons in cons_prices:
+        cons.send_keys(c_price)    
+
+
+    real_prices = driver.find_elements_by_xpath("//input[@name='price']")
+    for reals in real_prices:
+        reals.send_keys(r_price)
+
+    essential_ops = driver.find_element_by_xpath("//input[@name='frequently'][@value='1']")
+    essential_ops.click()
+
+    sleep(1)
+    save_sizes = driver.find_element_by_xpath("//button[@id='setTmpSeq']")
+    save_sizes.click()
+
+    driver.switch_to_window(windows[0])
+    sleep(2)
 
 # Needs to be fixed
 def image_upload():
