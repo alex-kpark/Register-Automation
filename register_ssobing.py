@@ -47,22 +47,38 @@ def ssobing_login(id, pw):
 
     driver.get('http://www.ssobing.com/selleradmin/goods/regist')
 
-def brand_classifier():
+def brand_classifier(sex):
     category_btn = driver.find_element_by_xpath("//button[contains(@id, 'categoryConnectPopup')]")
     category_btn.click()
     sleep(3)
 
-    misc_btn = driver.find_element_by_xpath("//option[contains(@value, 'A001')]")
-    misc_btn.click()
-    sleep(3)
+    if sex == '남':
+        #남성 티셔츠
+        misc_btn = driver.find_element_by_xpath("//option[contains(@value, 'A001')]")
+        misc_btn.click()
+        sleep(3)
 
-    female_bag = driver.find_element_by_xpath("//option[contains(@value, 'A0010003')]")
-    female_bag.click()
-    sleep(3)
+        secondary = driver.find_element_by_xpath("//option[contains(@value, 'A0010003')]")
+        secondary.click()
+        sleep(3)
 
-    tote_bag = driver.find_element_by_xpath("//option[contains(@value, 'A00100030002')]")
-    tote_bag.click()
-    sleep(3)
+        third = driver.find_element_by_xpath("//option[contains(@value, 'A00100030002')]")
+        third.click()
+        sleep(3)
+        
+    else:
+        #여성 티셔츠
+        misc_btn = driver.find_element_by_xpath("//option[contains(@value, 'A001')]")
+        misc_btn.click()
+        sleep(3)
+
+        secondary = driver.find_element_by_xpath("//option[contains(@value, 'A0010001')]")
+        secondary.click()
+        sleep(3)
+
+        third = driver.find_element_by_xpath("//option[contains(@value, 'A00100010003')]")
+        third.click()
+        sleep(3)
 
     #정확하게 tag달아서 지정해주어야 함, 여러 Element가 검색되었어서 오류 발생
     category_fin = driver.find_element_by_xpath("//button[@id='categoryConnect'][@onclick='this.form.submit();']")
@@ -202,9 +218,11 @@ def color_size(ops_name, size_val, c_price, r_price, inventory):
     for reals in real_prices:
         reals.send_keys(r_price)
 
+    #먼저 Indexing을 만들고, 그 Index를 따라가면서 실행
     inventories = driver.find_elements_by_xpath("//input[@name='stock']")
-    for invens in inventories:
-        invens.send_keys(inventory)
+    index_list = list(range(0,len(inventory)))
+    for i in index_list:
+        inventories[i].send_keys(inventory[i])
 
     essential_ops = driver.find_element_by_xpath("//input[@name='frequently'][@value='1']")
     essential_ops.click()
