@@ -29,6 +29,9 @@ prefs = {
 
 chrome_options.add_experimental_option("prefs",prefs)
 chrome_options.add_argument("--disable-features=EnableEphemeralFlashPermission")
+
+#For OSX
+#chrome_path = '/usr/local/bin/chromedriver'
 chrome_path = 'C:/Users/ALEXa/AppData/Local/Programs/Python/chromedriver.exe'
 
 driver = webdriver.Chrome(executable_path=chrome_path, options=chrome_options)
@@ -115,7 +118,7 @@ def product_info(name, sum_content, brand_code, keywords, outside_words, tax_boo
     check_alert.click()
 
     #Cancel Contract
-    #청약철회 가능하면 True, 아니면 False
+    #청약철회불가 가능하면 True, 아니면 False
     check_cancel = driver.find_element_by_xpath("//input[contains(@name, 'cancel_type')]")
     if cancel_bool == True:
         check_cancel.click()

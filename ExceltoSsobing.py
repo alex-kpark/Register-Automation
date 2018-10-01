@@ -57,7 +57,7 @@ for rownum in range(1, sh.nrows):
 
     #PlayAuto에 없는 변수 정의
     keywords = '아가타'
-    cancel_bool = True
+    cancel_bool = False
     adult_bool = False
     hscode_cont = ''
     min_num = 0
