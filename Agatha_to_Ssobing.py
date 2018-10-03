@@ -73,16 +73,16 @@ for rownum in range(1, sh.nrows):
     #size_Val 정의 (옵션의 종류 선언)
     size_list = ['S', 'M', 'L', 'XL']
     result = []
-    for test in row_values[28:32]:
-        if test == 'Null':
+    for color in row_values[28:32]:
+        if color == 'Null':
             tar = result[-1]
             changed_tar = tar.replace(',', ' ')
             result[-1] = changed_tar
         else: 
-            result.append(test + ' ' + size_list[0] + ', ')
-            result.append(test + ' ' + size_list[1] + ', ')
-            result.append(test + ' ' + size_list[2] + ', ')
-            result.append(test + ' ' + size_list[3] + ', ')
+            result.append(color + ' ' + size_list[0] + ', ')
+            result.append(color + ' ' + size_list[1] + ', ')
+            result.append(color + ' ' + size_list[2] + ', ')
+            result.append(color + ' ' + size_list[3] + ', ')
     size_val =  "".join(result)
 
     #inventory(재고) 정의
@@ -110,6 +110,7 @@ for rownum in range(1, sh.nrows):
     delivery(delivery_info)
     sleep(1)
     final_upload()
+    print(rownum)
     
     #곧바로 Register로 가버리면 페이지 중간으로 Load되어서 Brand Classifier가 WebElement를 못잡음. 그래서 메인페이지 한번 이동했다가 다시 Register로 이동
     driver.get('http://www.ssobing.com/selleradmin/main/index')

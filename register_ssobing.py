@@ -281,6 +281,7 @@ def detailed_exp(detailed_cont):
 
     check_html = driver.find_element_by_xpath("//div[@id='tx_switchertoggle1']")
     check_html.click()
+    sleep(3)
 
     cont_area = driver.find_element_by_xpath("//textarea[@id='tx_canvas_source1']")
     cont_area.send_keys(detailed_cont)
@@ -290,6 +291,7 @@ def detailed_exp(detailed_cont):
 
     alert = driver.switch_to_alert()
     alert.accept()
+
 
 def delivery(delivery_info):
     
