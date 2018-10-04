@@ -25,6 +25,7 @@ from register_ssobing import *
 #주의사항
 - Ssobing은 DB에서 상품명이 똑같으면 업로드 되지 않음 (SET에 대해서는 이름을 다르게 설정해주어야 함)
 - 정보를 올릴 Excel File에 변화가 생기면, 새로 파일을 만들어서 저장해주어야 함
+- 상세설명 항목에는 배송기간 안내, 연락가능한 판매자 연락처 기재가 필요함
 '''
 
 #Step1 : 상품등록 페이지까지 이동
@@ -104,7 +105,7 @@ for rownum in range(1, sh.nrows):
     selling_info(min_num, max_num, multiple)    
     sleep(1)
     color_size(ops_name, size_val, c_price, r_price, inventory)
-    sleep(1)
+    sleep(3)
     detailed_exp(detailed_cont)
     sleep(1)
     delivery(delivery_info)
