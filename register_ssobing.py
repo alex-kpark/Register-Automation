@@ -31,8 +31,8 @@ chrome_options.add_experimental_option("prefs",prefs)
 chrome_options.add_argument("--disable-features=EnableEphemeralFlashPermission")
 
 #For OSX
-chrome_path = '/usr/local/bin/chromedriver'
-#chrome_path = 'C:/Users/ALEXa/AppData/Local/Programs/Python/chromedriver.exe'
+#chrome_path = '/usr/local/bin/chromedriver'
+chrome_path = 'C:/Users/ALEXa/AppData/Local/Programs/Python/chromedriver.exe'
 
 driver = webdriver.Chrome(executable_path=chrome_path, options=chrome_options)
 
