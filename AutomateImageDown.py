@@ -1,5 +1,9 @@
 #-*- coding: utf-8 -*-
 
+'''
+제품정보가 담긴 엑셀 파일에서 이미지 링크를 받아, 이미지만 따서 저장하는 스크립트
+'''
+
 import xlrd
 from collections import OrderedDict
 import json

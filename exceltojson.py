@@ -17,7 +17,7 @@ for rownum in range(1, sh.nrows):
     order['product_number'] = row_values[0]
     order['order_number'] = row_values[1]
     order['order_date'] = row_values[2]
-    order['order_status'] = row_values[3].decode('utf-8')
+    order['order_status'] = row_values[3]
     order['claim_status'] = row_values[4]
     order['product_name'] = row_values[5]
     order['option_info'] = row_values[6]
