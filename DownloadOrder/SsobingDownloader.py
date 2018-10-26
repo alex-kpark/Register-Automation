@@ -8,10 +8,11 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+import time
+
 import xlrd
 from collections import OrderedDict
 
-from register_ssobing import *
 
 '''
 #참고사항
@@ -20,12 +21,40 @@ from register_ssobing import *
 '''
 
 #1 Login 이후 주문 리스트로 이동
-id = '#id'
-pw = '#pw'
+id = '#'
+pw = '#'
 
-ssobing_login(id, pw)
-driver.get("http://www.ssobing.com/selleradmin/order/catalog")
-driver.maximize_window()
+chrome_options = webdriver.ChromeOptions()
+
+prefs = {
+        "profile.default_content_setting_values.plugins": 1,
+        "profile.content_settings.plugin_whitelist.adobe-flash-player": 1,
+        "profile.content_settings.exceptions.plugins.*,*.per_resource.adobe-flash-player": 1,
+        "PluginsAllowedForUrls": "http://www.ssobing.com"
+}
+
+chrome_options.add_experimental_option("prefs",prefs)
+chrome_options.add_argument("--disable-features=EnableEphemeralFlashPermission")
+
+#For OSX
+#chrome_path = '/usr/local/bin/chromedriver'
+chrome_path = 'C:/Users/ALEXa/AppData/Local/Programs/Python/chromedriver.exe'
+
+driver = webdriver.Chrome(executable_path=chrome_path, options=chrome_options)
+
+def ssobing_login(id, pw):
+    driver.get('http://www.ssobing.com/selleradmin/login/index')
+
+    input_id = driver.find_element_by_xpath("//input[contains(@name, 'main_id')]")
+    input_pw = driver.find_element_by_xpath("//input[contains(@name, 'main_pwd')]")
+
+    input_id.send_keys(id)
+    input_pw.send_keys(pw)
+
+    login = driver.find_element_by_xpath("//input[contains(@class, 'submit_btn')]")
+    login.send_keys(Keys.ENTER)
+
+    driver.get('http://www.ssobing.com/selleradmin/goods/regist')
 
 #가능하면 다운로드 받는 폴더 Path 지정 가능하게 세팅하면 좋을 듯
 
@@ -49,19 +78,19 @@ def download_setting():
 
 
 def download_action():
-    sleep(3)
+    time.sleep(3)
 
     #전체선택
     select_ops = driver.find_elements_by_xpath("//span[@class='custom-select-box-btn btn drop_multi_main']")
     select_ops[0].click()
-    sleep(2)
+    time.sleep(3)
 
     #양식선택
-    select_form = driver.find_element_by_xpath("//select[@id='select_down_35']")
-    sleep(2)
+    #select_form = driver.find_element_by_xpath("//select[@id='select_down_35']")
+    time.sleep(3)
     select_btn = driver.find_element_by_xpath("//span[@class='custom-select-box-btn btn drop']")
     select_btn.click()
-    sleep(3)
+    time.sleep(3)
     select_basic = driver.find_elements_by_xpath("//span[contains(text(), '기본양식_파인애플')]")
     select_basic[0].click()
 
@@ -77,6 +106,12 @@ def download_action():
     #final_download
     final_down = driver.find_element_by_xpath("//span[@class='btn large gray']")
     final_down.click()
+
+
+ssobing_login(id, pw)
+
+driver.get("http://www.ssobing.com/selleradmin/order/catalog")
+driver.maximize_window()
 
 download_setting()
 download_action()
